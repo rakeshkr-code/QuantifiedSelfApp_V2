@@ -1,0 +1,15 @@
+Jinja2
+Flask
+Flask-SQLAlchemy
+Flask-RESTful
+matplotlib
+numpy
+Flask-Bcrypt
+flask-security-too
+requests
+gunicorn
+flask-cors
+redis
+celery[redis]
+weasyprint
+Flask-Caching

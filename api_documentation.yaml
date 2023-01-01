@@ -1,0 +1,629 @@
+openapi: 3.0.0
+info:
+  title: Qtf-Self App V2 API Documentation
+  version: 1.0.0
+  description: >-
+    <h2> ER Diagram </h2> <h3> User Table Schema </h3> <table> <thead>
+    <th>Column Name</th> <th>Column Type</th> <th>Constraints</th> </thead>
+    <tbody> <tr> <td>id</td> <td>Integer</td> <td>Primary Key, Auto
+    Increment</td> </tr> <tr> <td>email</td> <td>Text</td> <td>Unique, Not
+    Null</td> </tr> <tr> <td>fname</td> <td>Text</td> <td>Not Null</td> </tr>
+    <tr> <td>lname</td> <td>Text</td> <td> Nullable </td> </tr> <tr>
+    <td>password</td> <td>Text</td> <td>Not Null</td> </tr> <tr> <td>active</td>
+    <td>Bool</td> <td>Nullable</td> </tr> <tr> <td>fs_uniquifier</td>
+    <td>Text</td> <td>Not Null</td> </tr> </tbody> </table>
+
+    <h3> Tracker Table Schema </h3> <table> <thead> <th>Column Name</th>
+    <th>Column Type</th> <th>Constraints</th> </thead> <tbody> <tr>
+    <td>tracker_id</td> <td>Integer</td> <td>Primary Key, Auto Increment</td>
+    </tr> <tr> <td>user_id</td> <td>Integer</td> <td>Foreign Key (user.id),
+    Unique, Not Null</td> </tr> <tr> <td>tracker_name</td> <td>Text</td> <td>Not
+    Null</td> </tr> <tr> <td>description</td> <td>Text</td> <td> Nullable </td>
+    </tr> <tr> <td>track_type</td> <td>Text</td> <td>Not Null</td> </tr> <tr>
+    <td>settings</td> <td>Text</td> <td> Nullable </td> </tr> </tbody> </table>
+
+    <h3> Tracker-Log Table Schema </h3> <table> <thead> <th>Column Name</th>
+    <th>Column Type</th> <th>Constraints</th> </thead> <tbody> <tr>
+    <td>log_id</td> <td>Integer</td> <td>Primary Key, Auto Increment</td> </tr>
+    <tr> <td>user_id</td> <td>Integer</td> <td>Foreign Key (user.id), Unique,
+    Not Null</td> </tr> <tr> <td>tracker_id</td> <td>Integer</td> <td>Foreign
+    Key (tracker.tracker_id), Unique, Not Null</td> </tr> <tr> <td>year</td>
+    <td>Integer</td> <td>Not Null</td> </tr> <tr> <td>month</td>
+    <td>Integer</td> <td>Not Null</td> </tr> <tr> <td>day</td> <td>Integer</td>
+    <td>Not Null</td> </tr> <tr> <td>hour</td> <td>Integer</td> <td>Not
+    Null</td> </tr> <tr> <td>minute</td> <td>Integer</td> <td>Not Null</td>
+    </tr> <tr> <td>value</td> <td>Text</td> <td>Not Null</td> </tr> <tr>
+    <td>note</td> <td>Text</td> <td>Nullable</td> </tr> </tbody> </table>
+
+
+
+    <h2> Error Codes </h2> <table> <thead> <th> Resource </th> <th> Error Code
+    </th> <th> Message </th> </thead> <tbody> <tr> <td>User</td> <td>409</td>
+    <td>Some conflict occured while creating user object</td> </tr> <tr>
+    <td>Tracker</td> <td>409</td> <td>Some conflict occured while creating
+    tracker object</td> </tr> <tr> <td>Tracker</td> <td>404</td> <td>Tracker Not
+    Found</td> </tr> <tr> <td>Tracker</td> <td>400</td> <td>tracker_id required
+    but not given</td> </tr> <tr> <td>TrackerLog</td> <td>409</td> <td>Some
+    conflict occured while creating tracker_log object</td> </tr> <tr>
+    <td>TrackerLog</td> <td>404</td> <td>TrackerLog Not Found</td> </tr> <tr>
+    <td>TrackerLog</td> <td>400</td> <td>log_id required but not given</td>
+    </tr> </tbody> </table>
+
+    <!-- --------------comment----------------- -->
+servers:
+  - url: http://127.0.0.1:5000/
+paths:
+  /api/user:
+    summary: Create New user Or, Read user info
+    post:
+      summary: Create New User
+      description: ''
+      operationId: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                fname:
+                  type: string
+                  example: Rakesh Kr
+                lanme:
+                  type: string
+                  example: Mandal
+                password:
+                  type: string
+                  example: 1234
+      responses:
+        '200':
+          description: Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  email:
+                    type: string
+                    example: example@gmail.com
+                  fname:
+                    type: string
+                    example: Rakesh Kr
+                  lanme:
+                    type: string
+                    example: Mandal
+        '409':
+          description: Some conflict occured while creating user
+        '500':
+          description: Internal Server Error
+        
+    get:
+      summary: Read User Info
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                User_Response_Fields:
+                  value:
+                    {
+                        'id': 1,
+                        'email': example@gmail.com,
+                        'fname': Rakesh Kr,
+                        'lname': Mandal
+                    }
+  /api/alltrackers:
+    summary: GET method Read Tracker data of all the trackers
+    get:
+      summary: Read all Trackers data
+      description: Operation to get all Trackers List.
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: List of all Tracker's objects
+                type: object
+                properties:
+                  alltrackers:
+                    type: object
+                    example: [{'tracker_id':3, 'tracker_name':'Running Tracker', 'lastlog':'', 'lastval':''}, {'tracker_id':3, 'tracker_name':'Running Tracker', 'lastlog':'', 'lastval':''}]
+        '500':
+          description: Internal Server Error
+
+
+  /api/tracker:
+    summary: POST method Create new Tracker with request body
+    post:
+      summary: Create New Tracker
+      description: Create new Tracker resource
+      requestBody:
+        description: track_type can take only two possible values - 'Numerical' or 'Multiple_Choice' which is case sensetive, If trac_type is Numerical then settings should be null, In case of Multiple_choice settings should be CSV without spaces
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  tracker_name:
+                    type: string
+                    example: New Tracker
+                  description:
+                    type: string
+                    example: dummy description
+                  track_type:
+                    type: string
+                    example: Numerical
+                  settings:
+                    type: string
+                    example: Null
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tracker_id:
+                    type: integer
+                    example: 2
+                  user_id:
+                    type: integer
+                    example: 1
+                  tracker_name:
+                    type: string
+                    example: Running Tracker
+                  description:
+                    type: string
+                    example: Tracking daily running in kilometers
+                  track_type:
+                    type: string
+                    example: Numerical
+                  settings:
+                    type: string
+                    example: Null
+        '409':
+          description: Some conflict occured while creating tracker object
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Tracker Not Found
+        '400':
+          description: Bad Request - tracker_id required, but not given
+
+
+  /api/tracker/{tracker_id}:
+    summary: >-
+      GET, PUT, DELETE methods Read, Update and Delete a particular Tracker with
+      data as request body (when required)
+    get:
+      summary: Read Tracker data
+      description: Operation to Read tracker resource.
+      parameters:
+        - in: path
+          name: tracker_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: Tracker Object
+                type: object
+                properties:
+                  tracker_id:
+                    type: integer
+                    example: 2
+                  user_id:
+                    type: integer
+                    example: 1
+                  tracker_name:
+                    type: string
+                    example: Running Tracker
+                  description:
+                    type: string
+                    example: Tracking daily running in kilometers
+                  track_type:
+                    type: string
+                    example: Numerical
+                  settings:
+                    type: string
+                    example: Null
+        '500':
+          description: Internal Server Error
+        '404':
+          description: tracker not found
+
+
+    put:
+      summary: Update Tracker data
+      description: Operation to update the tracker resource.
+      parameters:
+        - in: path
+          name: tracker_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+      requestBody:
+        description: track_type can take only 2 possible values - 'Numerical' or 'Multiple_Choice' which is case sensetive, If trac_type is Numerical then settings should be null, In case of Multiple_choice settings should be CSV without spaces
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tracker_name:
+                  type: string
+                  example: Running Tracker
+                description:
+                  type: string
+                  example: Tracking daily running in kilometers
+                settings:
+                  type: string
+                  example: Null
+      responses:
+        '200':
+          description: Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tracker_id:
+                    type: integer
+                    example: 2
+                  user_id:
+                    type: integer
+                    example: 1
+                  tracker_name:
+                    type: string
+                    example: Running Tracker
+                  description:
+                    type: string
+                    example: Tracking daily running in kilometers
+                  track_type:
+                    type: string
+                    example: Numerical
+                  settings:
+                    type: string
+                    example: Null
+        '404':
+          description: Tracker not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request - tracker_id required but not given
+        '409':
+          description: Some conflict occured while updating tracker object
+
+    delete:
+      description: Operation to delete the tracker resource
+      parameters:
+        - in: path
+          name: tracker_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+      responses:
+        '200':
+          description: Successfully Deleted
+        '404':
+          description: Tracker not found
+        '500':
+          description: Intenal Server Error
+
+  
+  /api/trackerlog:
+    summary: POST method Create new Log record with request body
+    post:
+      summary: Create New Tracker
+      description: Create new Tracker resource
+      requestBody:
+        description: track_type can take only two possible values - 'Numerical' or 'Multiple_Choice' which is case sensetive, If trac_type is Numerical then settings should be null, In case of Multiple_choice settings should be CSV without spaces
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  tracker_id:
+                    type: integer
+                    example: 2
+                  year:
+                    type: integer
+                    example: 2022
+                  month:
+                    type: integer
+                    example: 8
+                  day:
+                    type: integer
+                    example: 5
+                  hour:
+                    type: integer
+                    example: 6
+                  minute:
+                    type: integer
+                    example: 45
+                  value:
+                    type: string
+                    example: 4
+                  note:
+                    type: string
+                    example: "good enough"
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: integer
+                    example: 5
+                  user_id:
+                    type: integer
+                    example: 1
+                  tracker_id:
+                    type: integer
+                    example: 2
+                  year:
+                    type: integer
+                    example: 2022
+                  month:
+                    type: integer
+                    example: 8
+                  day:
+                    type: integer
+                    example: 5
+                  hour:
+                    type: integer
+                    example: 6
+                  minute:
+                    type: integer
+                    example: 45
+                  value:
+                    type: string
+                    example: 4
+                  note:
+                    type: string
+                    example: "good enough"
+        '409':
+          description: Some conflict occured while creating tracker-log record
+        '500':
+          description: Internal Server Error
+        '404':
+          description: TrackerLog Not Found
+
+
+  /api/alllogs/{tracker_id}:
+    summary: GET method Reads all Log records of tracker_id
+    parameters:
+        - in: path
+          name: tracker_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+    get:
+      summary: Read all Logs related to tracker_id
+      description: Operation to get all Trackers List.
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: List of All the Log records
+                type: object
+                properties:
+                  alltrackers:
+                    type: object
+                    example: [{'log_id':5, 'user_id':1, 'tracker_id':2, 'year':2022, 'month':8, 'day':5, 'hour':6, 'minute':45, 'value':4, 'note':'good enough',}, {'log_id':6, 'user_id':1, 'tracker_id':2, 'year':2022, 'month':8, 'day':6, 'hour':6, 'minute':45, 'value':5, 'note':'better',}]
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Logs not found
+
+  /api/trackerlog/{log_id}:
+    summary: >-
+      GET, PUT, DELETE methods Reads, Updates, Deletes particular Log record of
+      log_id respectively with data as request body (when required)
+    get:
+      summary: Read Tracker data
+      description: Operation to Read tracker resource.
+      parameters:
+        - in: path
+          name: log_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+      responses:
+        '200':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: integer
+                    example: 5
+                  user_id:
+                    type: integer
+                    example: 1
+                  tracker_id:
+                    type: integer
+                    example: 2
+                  year:
+                    type: integer
+                    example: 2022
+                  month:
+                    type: integer
+                    example: 8
+                  day:
+                    type: integer
+                    example: 5
+                  hour:
+                    type: integer
+                    example: 6
+                  minute:
+                    type: integer
+                    example: 45
+                  value:
+                    type: string
+                    example: 4
+                  note:
+                    type: string
+                    example: "good enough"
+        '500':
+          description: Internal Server Error
+        '404':
+          description: TrackerLog Not Found
+
+
+    put:
+      summary: Update Tracker data
+      description: Operation to update the tracker resource.
+      parameters:
+        - in: path
+          name: log_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+      requestBody:
+        description: track_type can take only 2 possible values - 'Numerical' or 'Multiple_Choice' which is case sensetive, If trac_type is Numerical then settings should be null, In case of Multiple_choice settings should be CSV without spaces
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                year:
+                  type: integer
+                  example: 2022
+                month:
+                  type: integer
+                  example: 8
+                day:
+                  type: integer
+                  example: 5
+                hour:
+                  type: integer
+                  example: 6
+                minute:
+                  type: integer
+                  example: 45
+                value:
+                  type: string
+                  example: 4
+                note:
+                  type: string
+                  example: "good enough"
+      responses:
+        '200':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: integer
+                    example: 5
+                  user_id:
+                    type: integer
+                    example: 1
+                  tracker_id:
+                    type: integer
+                    example: 2
+                  year:
+                    type: integer
+                    example: 2022
+                  month:
+                    type: integer
+                    example: 8
+                  day:
+                    type: integer
+                    example: 5
+                  hour:
+                    type: integer
+                    example: 6
+                  minute:
+                    type: integer
+                    example: 45
+                  value:
+                    type: string
+                    example: 4
+                  note:
+                    type: string
+                    example: "good enough"
+        '500':
+          description: Internal Server Error
+        '404':
+          description: TrackerLog Not Found
+        '409':
+          description: Some conflict occured while updating the Log
+
+
+    delete:
+      description: Operation to delete the tracker resource
+      parameters:
+        - in: path
+          name: log_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+      responses:
+        '200':
+          description: Successfully Deleted
+        '404':
+          description: TrackerLog not found
+        '500':
+          description: Intenal Server Error
+
+  /api/exportascsv/{tracker_id}:
+    summary: >-
+      GET method generates CSV file of all the Log records of Tracker and pushes
+      a task to Celery system to send the user’s mail
+    parameters:
+        - in: path
+          name: tracker_id
+          required: true
+          schema:
+            type: integer
+            example: 2
+    get:
+      summary: Initiates backend job to send csv through mail
+      description: GET method generates CSV file of all the Log records of Tracker and pushes a task to Celery system to send the user’s mail
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: Backend Job
+                type: object
+                properties:
+                  alltrackers:
+                    type: string
+                    example: 'job_id'
+        '500':
+          description: Internal Server Error
+
+

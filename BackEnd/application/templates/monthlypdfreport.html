@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        @page {
+            @top-left {
+                background: #82b965;
+                content: counter(page);
+                height: 1cm;
+                text-align: center;
+                width: 1cm;
+            }
+
+            @top-center {
+                background: #82b965;
+                content: '';
+                display: block;
+                height: .05cm;
+                opacity: .5;
+                width: 100%;
+            }
+
+            @top-right {
+                content: string(heading);
+                font-size: 9pt;
+                height: 1cm;
+                vertical-align: middle;
+                width: 100%;
+            }
+        }
+
+        @page: first {
+            background-size: cover;
+            margin: 0;
+        }
+
+        @page chapter {
+            background: #82b965;
+            margin: 0;
+
+            @top-left {
+                content: none;
+            }
+
+            @top-center {
+                content: none;
+            }
+
+            @top-right {
+                content: none;
+            }
+        }
+
+        html {
+            color: #393939;
+            font-family: "Noto sans", sans-serif;
+            font-size: 14pt;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        h1 {
+            color: #82b965;
+            font-size: 35pt;
+            margin: 5cm, 2cm, 0, 2cm;
+            width: 100%;
+        }
+
+        h2 {
+            break-before: always;
+            font-size: 28pt;
+        }
+
+        h3 {
+            font-size: 15pt;
+        }
+
+        h4 {
+            font-size: 13pt;
+        }
+
+        #cover {
+            align-content: space-between;
+            display: flex;
+            flex-wrap: wrap;
+            height: 297mm;
+        }
+
+        #cover footer {
+            background: #82b965;
+            flex: 1 50%;
+            margin: 0 -2cm;
+            padding: 1cm 0;
+            padding-left: 3cm;
+        }
+
+        #contents_num, #contents_mc {
+            break-after: left;
+        }
+
+        #contents_num h2, #contents_mc h2 {
+            font-size: 20pt;
+            font-weight: 400;
+            margin-bottom: 3cm;
+        }
+
+        table{
+            border: 2px solid black;
+            /* border-style: solid; */
+        }
+        th {
+            border: 1px ridge black;
+            /* border-radius: 10px; */
+            /* background-color: rgb(0, 183, 146); */
+            background-color: teal;
+            color: white;
+        }
+        td {
+            border: 1px outset black;
+            border-radius: 10px;
+            background-color: rgb(0, 237, 237);
+        }
+    </style>
+</head>
+
+<body>
+    <article id="cover">
+        <h1>{{ data['name'] }} Monthly Report : {{ data['mnth'] }} Report </h1>
+        <!-- <div style="align-items: center; text-align: center;"> -->
+            <!-- <h2> {{ data['mnth'] }} Report </h2> -->
+        <!-- </div> -->
+        <footer>
+            {{ data['email'] }} | team@qtfselfapp.com | http://127.0.0.1:5000/
+        </footer>
+    </article>
+    <article id="contents_num">
+        <h2>Numerical Tracker Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tracker Name</th>
+                    <th>Average Value</th>
+                    <th>Total Value</th>
+                </tr>
+            </thead>
+
+            <body>
+                {% for record in data.num_trackers %}
+                <tr>
+                    <td>{{record.tname}}</td>
+                    <td>{{record.avgval}}</td>
+                    <td>{{record.totval}}</td>
+                </tr>
+                {% endfor %}
+            </body>
+        </table>
+    </article>
+
+    <article id="contents_mc">
+        <h2>Multiple_Choice Tracker Details</h2>
+        {% for record in data.mc_trackers %}
+        <h4>{{ record.tname }}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+
+            <body>
+                {% for rec in record.tdata %}
+                <tr>
+                    <td>{{rec.value}}</td>
+                    <td>{{rec.count}}</td>
+                </tr>
+                {% endfor %}
+            </body>
+        </table>
+        {% endfor %}
+    </article>
+</body>
+
+</html>

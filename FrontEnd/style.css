@@ -1,0 +1,74 @@
+body{
+    background: #ecf0f3;
+}
+.container{
+    max-width: 720px;
+    margin: auto;
+}
+.form-card{
+    background: rgb(237, 224, 212);
+}
+.makecenter{
+    align-items: center;
+    text-align: center;
+}
+.topbar, .flexbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navflex{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.btn{
+    max-height: 35px;
+    text-align: center;
+    padding: 3px 8px;
+}
+.add-new{
+    text-align: center;
+    align-items: center;
+    min-height: 40px;
+}
+.add-new-btn{
+    text-align: center;
+    padding: 15px 20px;
+    min-height: 50px;
+}
+.formborder{
+    padding: 10px;
+}
+#circularimage{
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+}
+/* For ScrollBar... */
+table.scroll {
+    /* width: 100%;  */
+    border-spacing: 0;
+}
+tbody.scroll, thead.scroll tr.scroll { display: block; }
+tbody.scroll {
+    /* height: 120px; */
+    height: 25vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+tbody.scroll td.scroll, thead.scroll th.scroll {
+    width: 140px;
+}
+thead.scroll th.scroll:last-child {
+    width: 156px;
+}
+.footersec {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color:rgb(44, 38, 34);
+    color: linen;
+    text-align: center;
+}
